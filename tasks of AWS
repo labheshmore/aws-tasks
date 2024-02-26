@@ -1,2 +1,292 @@
+1.Create a user > then enter in that users profile > click on add permission > create in line policy . 
+
+2.Then select all s3 actions >effect allow
+
+
+3 then select specific >click on add ARN of bucket >add ARN of bucket >and  click on next
+
+
+
+4 then create a policy name  and click on create policy.
+
+
+
+ And then after login the user and access the bucket.
+
+
+ Q2. Create a policy to access only 2 object in a specific bucket.
+First we need to create a user >without giving any permission>
+
+Then after open the profile of that user and go to Add permission and create inline poilcy in that
+>on that create consol edit the following
+step 1
+:select service name which we want to give the  access
+
+Step 2: then after select the permissions which we want give that specific user
+
+Step 3:select specific actions for that 
+Like listbucket,listallbucket,getbucketlocation,get and put object,
+
+Step 4 : In resource select specific and in bucket add ARN in that and add object’s ARN {if we want to access specific object then need the arn of that object. }
+
+Step 5 : after adding bucket ARN add object’s ARN and click on add ARNs
+
+Step 6 : Review and create a policy by giving name to that policy and create policy
+
+ 
+
+And here policy is created 
+
+Now log in via that user and access
+
+
+And specific object is accessable 
+
+Q 3Create a policy to deny the access specific bucket.
+ Create a user with s3 full permission and do all the steps of above task as same until actions denied in that effect deny
+
+
+Give the arn of that specific bucket which we want to deny
+then after login from that user and try to access
+Q 4 create a policy to create the user only and can attach policy to them. 
+
+step 1 : create an user with zero permission
+
+
+
+
+step 2:  then select the specific user permission policy
+like 1 getuser 
+       2 listuser 
+       3 attachuserpolicy
+       4 createuser
+       5 listpolicyes
+       6 getaccountpasswordpolicyes
+
+
+
+and select All in Resources. And create a policy with name and attach that policy to the user.
+
+
+
+then after login by that user and validate that policy.
+
+Q5 create a policy to place the user in a group only. 
+Step 1 : create a user with zero permission and add inline permission to that user to only place the another user in group only.
+
+ 
+ Here is user with no permission
+
+Step 2 :
+Select specific permission to create the policy we want.
+1 get user
+2 list group
+3 add user to group
+4 add account password policy
+
+
+
+
+
+
+
+
+Effect is Allow and  in resources select All and after that create a policy with name 
+
+
+Step 3 : 
+Attach that policy to user and check it.
+
+ 
+Log in by that user and go to user group >>pickup group and add user 
+IAM > User groups > any group > any user > add user.
+
+Q6 policy to get “read” access of all users, groups but not policy
+
+Step 1 :
+In user create a inline policy. And select a following actions to create a above policy.
+
+
+ Actions : 1 get user 
+                 2 get group.
+Step 2 :
+create a policy and attach it to the user
+
+Step 3 : validate that policy .
+
+
+ Try to list and read the policy u get an error Access denied.
+So here u can only read access of all users and groups.
+
+Q7. Policy to get access to billing, ec2 and cloudwatch. 
+Step 1: create a user without a permissions and create a policy to provide access of cloudwatch and Ec2 . And attach a AWSbilling read only policy for Billing access..
+
+ Step2 : Now attach these policy to the user and check it.
+	
+
+
+
+Q8.How to give access only to northern virginia.
+step 1. In AWS console go to IAM service in that select the policy resource
+step 2. Create a policy in json to allow specific region add some permission like given below.
+
+
+
+Step 3 then create and name it add permission and attach it to the specific user
+ 
+
+
+
+
+Q9. Create a policy like when users are login into console, without MFA not a single IAM user has able to access any AWS kind of aws services , he gots an permission denied  error.
+Q10. Create a resource based policy and attach to S3_B16 Bucket & only sunny user can able to access that bucket.
+
+Q8 {sub}How to give access only to northern virginia.
+
+Add 4 users >> 2 groups (devops & cloud) >> cloud member will access their password will only no & devops group there no will password standards
+>> cloud group SE3 full access % other EC2 full access >> Devops EC2 full access in north virginia.
+
+Step 1: created 4 members with 2 groups as cloud and devops and 
+              Cloud have password permission and dev as not 
+
+
+
+
+
+
+
+ Step 2.
+Now attach s3 full acces and EC2 full access to cloud group 
+
+
+
+Step 3. Now add JSON policy to access ec2 only from north v. 
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:Region": "us-east-1"
+                }
+            }
+        }
+    ]
+}
+This is how we have an error form other region while ec2 access.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USER
+
+Q1. Add four different users in the organisation account.
+Step. There is one organisation account. In this account here are the 4 user
+
+Q2. Add one user without permission.
+
+go to IAM consol and create a user with no permission
+
+
+
+
+Q3.Add user with console & programmatic user
+Step1.user is added with consol access
+
+
+Step 2. User is added with programmatic access
+
+
+
+
+Q4 If IAM users are created w/o password, then how can you set the password of that IAM user as an Admin. (W/O deleting user)
+Step 1. Go in IAM service select the user then after go to security credentials and create a access and secret key and copy it.
+Step 2. Or download  .csv and share these keys to user. 
+           
+
+
+S3:-
+
+
+1.Implement MFA on Bucket when users are going to delete any objects, then he needs an Approval from MFA Code.
+
+Step1. Log in by root and go to s3 create a bucket and enable versioning. Assign MFA to virtual. 
+
+STEP 2. Then go to security credentials and add MFA and create a access and secret access key. Now go to cli mode to enable MFA delete option
+
+Step 3. On cli terminal 
+          #aws configure --profile root_user {ref. AWS re:post}
+          #aws s3 ls --profile root_user (to list the bucket) 
+     #aws s3api put-bucket-versioning --bucket<bucketname> --versioning-configuration MFADelete=Enable –mfa “arn:mfa/root-account-mfa-device no” --profile root user
+{if command is successful then u don’t get an output/ if u prompt an error install latest version of aws cli}
+
+Step 4.  now go to s3 service and check the mfa delete is enable or not.
+
+
+2.Create a Bucket with cli commands & upload the object from cli mode.
+
+Step 1. Create a IAM user with s3full access,
+            Then create a access and secret access key’s from security credentials. Download it. 
+ Step 2. Open cloudshell cli then configure it and create a s3 bucket with unique name and region.
+
+Command #aws configure
+                 #aws s3 ls
+                 #aws s3api create-bucket –bucket<name> --region <ap-south-1>
+
+3.Complete one project with server less static website hosting, with deployment & after deployment management of the website in backend side. Make a proper document of that project.
+
+
+
+Step1. Create a bucket in s3 and download css tmp from google and extract it.
+To ur local system
+
+
+
+
+
+ Step 2. Add that index.hmtl in out of the folder and enable the static web hosting in properties 
+
+
+
+
+
+
+
+
+Step3. Now off the public access{enable} from the permission
+
+ And make ACL enanle
+
+
+
+
+
+Step 4. Now give a permission to list and read for everyone in access control list.ACL 
+
+
+
+
+Step 5. Then give a public permission to all objects.
+
+
+Go to bucket select the object then Actions and select the make public using ACL
+
+Step 6. Now copy the url and paste it on google
+
 Q-Create a policy to access all objects in a specific bucket.
 A-
